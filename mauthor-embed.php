@@ -17,3 +17,11 @@ function register_mauthor_widget( $widgets_manager ) {
 
 }
 add_action( 'elementor/widgets/register', 'register_mauthor_widget' );
+
+
+function my_plugin_frontend_stylesheets() {
+    wp_register_style( 'frontend-style-1', plugins_url( '/style.css', __FILE__ ) );
+    wp_enqueue_style( 'frontend-style-1' );
+}
+
+add_action( 'elementor/editor/after_enqueue_styles', 'my_plugin_frontend_stylesheets' );

@@ -1,5 +1,7 @@
 <?php
+
 class mauthor_widget_1 extends \Elementor\Widget_Base {
+
 
 	public function get_name() {
 		return 'mauthor_widget';
@@ -10,7 +12,7 @@ class mauthor_widget_1 extends \Elementor\Widget_Base {
 	}
 
 	public function get_icon() {
-		return 'eicon-code';
+		return 'demo-icon icon-ma';
 	}
 
 	public function get_categories() {
@@ -1166,6 +1168,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 //# sourceMappingURL=scalable.js.map</script>
 <script src="jquery-3.6.1.min.js"></script>
  <style>
+
         .container {
             max-width: 100%;
         }
