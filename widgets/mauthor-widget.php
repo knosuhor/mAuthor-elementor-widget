@@ -72,11 +72,26 @@ class mauthor_widget_1 extends \Elementor\Widget_Base {
 				],
 			]
 		);
-
        
+        $this->add_control(
+			'mobile',
+			[
+				'label' => esc_html__( 'Force device view', 'mauthor_widget' ),
+				'type' => \Elementor\Controls_Manager::SELECT,
+                'label_block' => true,
+				'default' => 'default',
+				'options' => [
+					' ' => esc_html__( 'Default', 'mauthor_widget' ),
+					'300px'  => esc_html__( 'Mobile', 'mauthor_widget' ),
+					'1140px' => esc_html__( 'Desktop', 'mauthor_widget' ),
+				],
+				'selectors' => [
+					'{{WRAPPER}} .resizable-lesson' => 'width: {{VALUE}};',
+				],
+			]
+		);
 
 		$this->end_controls_section();
-
 	
         $this->start_controls_section(
 			'style_section',
@@ -91,7 +106,7 @@ class mauthor_widget_1 extends \Elementor\Widget_Base {
 			[
 				'label' => esc_html__( 'Align', 'mauthor_widget' ),
 				'type' => \Elementor\Controls_Manager::SELECT,
-				'default' => 'solid',
+				'default' => 'auto',
 				'options' => [
 					'auto' => esc_html__( 'Center', 'mauthor_widget' ),
 					'0 auto 0 0'  => esc_html__( 'Left', 'mauthor_widget' ),
@@ -126,8 +141,16 @@ class mauthor_widget_1 extends \Elementor\Widget_Base {
 					'size' => 15,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .resizable-lesson' => 'border-radius: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .container' => 'border-radius: {{SIZE}}{{UNIT}};',
 				],
+			]
+		);
+
+        $this->add_group_control(
+			\Elementor\Group_Control_Border::get_type(),
+			[
+				'name' => 'border',
+				'selector' => '{{WRAPPER}} .container',
 			]
 		);
                 
@@ -137,7 +160,7 @@ class mauthor_widget_1 extends \Elementor\Widget_Base {
 				'label' => esc_html__( 'Box Shadow', 'mauthor_widget' ),
                 
                 'label_block' => true,
-				'selector' => '{{WRAPPER}} .resizable-lesson',
+				'selector' => '{{WRAPPER}} .container',
                 'default' => [
 					'horizontal' => 0,
 	            'vertical' => 0,
@@ -147,6 +170,7 @@ class mauthor_widget_1 extends \Elementor\Widget_Base {
 				],
 			]
 		);
+
 				
 			
         $this->end_controls_section();
@@ -165,7 +189,6 @@ class mauthor_widget_1 extends \Elementor\Widget_Base {
 		// get the individual values of the input
 		$mauthor_link = $settings['mauthor_link'];
         $width = $settings['width'];
-        $radius = $settings['radius'];
 
 		?>
 
@@ -1171,33 +1194,35 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
         .container {
             max-width: 100%;
+            overflow: hidden;
         }
         .<?php echo $uniqID;  ?> {
 
             width: 100%;
             margin: 0 auto;
-            overflow: hidden;
             position: relative;
-            overflow: visible;  
+            overflow: hidden;  
         }
 
-        .elementor #<?php echo $uniqID;  ?> iframe.resizable-lesson {
+         #<?php echo $uniqID;  ?> iframe.resizable-lesson {
             max-width: none;
-            border-radius: <?php echo $radius;  ?>px;
             border: none;
             box-sizing: border-box;
-            overflow: visible;  
+            overflow: hidden; 
+           
         }
 
     </style>
             <div class="container" id="testframe">
                 <div class="<?php echo $uniqID;  ?>" id="<?php echo $uniqID;  ?>">
-                    <iframe class="resizable-lesson"  scrolling="no" style="overflow:hidden" src="<?php echo $mauthor_link;  ?>">
+                    <iframe class="resizable-lesson" content="width=1024" scrolling="no" style="overflow:hidden" src="<?php echo $mauthor_link;  ?>">
                     </iframe>
                 </div>
-                <script>
+                
+            </div>
+    
+            <script>
                     window.addEventListener('message', onMessageReceived, false);
-
 
                     function onMessageReceived (event) {
                     var data = event.data, size, width, height;
@@ -1205,17 +1230,16 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
                       size = data.substring('RESIZE:'.length).split(';');
                       width = parseInt(size[0]);
                       height = parseInt(size[1]);
+                        if (document.getElementById("<?php echo $uniqID;  ?>").getElementsByClassName("resizable-lesson")[0].contentWindow === event.source) {
+
                          document.getElementById("<?php echo $uniqID;  ?>").getElementsByClassName("resizable-lesson")[0].style.width = width + 'px';
                          document.getElementById("<?php echo $uniqID;  ?>").getElementsByClassName("resizable-lesson")[0].style.height = height + 'px';
-                         document.getElementById("<?php echo $uniqID;  ?>").style.paddingTop = height / width * 100 + '%';
+                         document.getElementById("<?php echo $uniqID;  ?>").style.paddingTop = height / width * 100 + '%';}
 
         }
     }
 
-</script>
-            </div>
-    
-           
+</script>      
     <script>
 
         var element = document.querySelector('.<?php echo $uniqID;  ?>');
